@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../store/useAuth";
 import type { ReactNode } from "react";
 
-export default function ProtectedRoute({ children }: { children: ReactNode}) {
+function ProtectedRoute({ children }: { children: ReactNode}) {
     const { user } = useAuth();
 
     if (!user) {
@@ -11,3 +11,4 @@ export default function ProtectedRoute({ children }: { children: ReactNode}) {
 
     return children
 }
+export default ProtectedRoute
