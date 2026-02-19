@@ -11,20 +11,25 @@ export default function Login() {
   const { setUser, fetchMe } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const handleSubmit = async (
+    e: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  ) => {
     e.preventDefault();
     setError("");
 
     try {
       await api.post("/auth/login", { username, password });
       await fetchMe();
-      navigate("/");
+      navigate("/admin");
     } catch (err: any) {
       console.error("Login request payload:", { username, password });
       if (axios.isAxiosError(err)) {
         console.error("Axios response:", err.response);
-        const serverMsg = err.response?.data?.message ?? err.response?.data ?? err.message;
-        setError(typeof serverMsg === "string" ? serverMsg : JSON.stringify(serverMsg));
+        const data = err.response?.data;
+
+        const serverMsg = data?.message ?? data?.error ?? err.message;
+
+        setError(serverMsg);
       } else {
         setError(err?.message ?? String(err));
         console.error("Login error:", err);
@@ -33,21 +38,46 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        value={username}
-        onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
-        placeholder="username"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
-        placeholder="password"
-      />
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      <button type="submit">Login</button>
-    </form>
+    <div className="min-h-[80vh] flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg space-y-6"
+      >
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Välkommen tillbaka</h1>
+          <p className="text-gray-500 text-sm">Logga in för att fortsätta</p>
+        </div>
+
+        <div className="space-y-4">
+          <input
+            value={username}
+            onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
+            placeholder="Username"
+            className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80 focus:border-transparent transition"
+          />
+
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+            placeholder="Password"
+            className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black/80 focus:border-transparent transition"
+          />
+        </div>
+
+        {error && (
+          <div className="text-red-500 text-sm bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 active:scale-[0.99] transition"
+        >
+          Login
+        </button>
+      </form>
+    </div>
   );
 }
-
