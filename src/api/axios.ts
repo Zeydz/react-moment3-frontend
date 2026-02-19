@@ -58,3 +58,13 @@ export const me = async (): Promise<User | null> => {
     throw error;
   }
 };
+
+/* Logout - ask server to clear session cookie */
+export const logoutRequest = async (): Promise<void> => {
+  try {
+    await api.post('/auth/logout');
+  } catch (error) {
+    console.error('Error logging out:', error);
+    throw error;
+  }
+};

@@ -6,7 +6,7 @@ export default function Layout() {
   const activeStyle = "bg-blue-600 text-white";
   const inactiveStyle = "text-white hover:text-gray-300";
 
-  const { user, logout } = useAuth();
+  const { user, logout, loading, error, setError } = useAuth();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,8 +24,10 @@ export default function Layout() {
             >
               Hem
             </NavLink>
-
-            {!user ? (
+            {/* Show neither login nor user until loading finished */}
+            {loading ? (
+              <span className="text-sm text-gray-300">Loading...</span>
+            ) : !user ? (
               <NavLink
                 to="/login"
                 className={({ isActive }) =>
@@ -52,6 +54,20 @@ export default function Layout() {
           </div>
         </div>
       </nav>
+
+      {error && (
+        <div className="bg-red-50 border-t border-red-200">
+          <div className="max-w-7xl mx-auto p-3 flex items-center justify-between text-red-700">
+            <div>{error}</div>
+            <button
+              onClick={() => setError(null)}
+              className="text-sm text-red-500 underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-5xl mx-auto p-4">
         <Outlet />

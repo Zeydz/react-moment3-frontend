@@ -1,13 +1,14 @@
 import { create } from "zustand";
-import { me } from "../api/axios";
+import { me, logoutRequest } from "../api/axios";
 import type { User } from "../api/axios";
 /* Type for auth store */
 interface AuthState {
     user: User | null;
     loading: boolean;
     error?: string | null;
+    setError: (error: string | null) => void;
     setUser: (user: User | null) => void;
-    logout: () => void;
+    logout: () => Promise<void>;
     fetchMe: () => Promise<void>;
 }
 
@@ -16,18 +17,33 @@ export const useAuth = create<AuthState>((set) => ({
     loading: false,
     error: null,
 
+    setError: (error) => set({ error }),
+
     setUser: (user) => set({ user, error: null }),
 
-    logout: () => set({ user: null }),
+    logout: async () => {
+        set({ loading: true, error: null });
+        try {
+            /* Call server to clear cookie. */
+            await logoutRequest();
+            set({ user: null, error: null });
+        } catch (error: any) {
+            set({ error: error?.message ?? String(error) });
+            console.error('Error during logout:', error);
+        } finally {
+            set({ loading: false });
+        }
+    },
 
     fetchMe: async () => {
         set({ loading: true, error: null });
         try {
-            // Fetch the current user from the backend
+            /* Fetch user from backend */
+            console.log('fetchMe: starting');
             const data = await me();
+            console.log('fetchMe: result', data);
             set({ user: data ?? null });
         } catch (error: any) {
-            // If there's an error, clear the user and set the error message
             set({ user: null, error: error?.message ?? String(error) });
             console.error("Error fetching user:", error);
         } finally {

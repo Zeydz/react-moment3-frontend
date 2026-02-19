@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useAuth } from '../store/useAuth'
 
 function Admin() {
-    const { user, fetchMe} = useAuth();
-    useEffect(() => {
-        fetchMe();
-    }, []);
+  const { user } = useAuth();
 
-    console.log(user);
   return (
     <>
         <h1 className="text-2xl font-bold mb-4">Admin sida</h1>

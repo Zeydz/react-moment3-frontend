@@ -1,11 +1,34 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { RouterProvider } from 'react-router-dom'
-import { router } from './router.tsx'
+import { StrictMode, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router.tsx";
+import { useAuth } from "./store/useAuth";
 
-createRoot(document.getElementById('root')!).render(
+function AppInit({ children }: { children: React.ReactNode }) {
+  const loading = useAuth((s) => s.loading);
+
+  useEffect(() => {
+    // Call fetchMe from the store directly to avoid effect re-running
+    // when function identity changes from store subscriptions.
+    void useAuth.getState().fetchMe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+}
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AppInit>
+      <RouterProvider router={router} />
+    </AppInit>
   </StrictMode>,
-)
+);

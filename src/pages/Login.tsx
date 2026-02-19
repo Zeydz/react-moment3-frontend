@@ -1,21 +1,24 @@
 import { useState, type SyntheticEvent } from "react";
 import axios from "axios";
 import { useAuth } from "../store/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { api } from "../api/axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { setUser, fetchMe } = useAuth();
+  const { fetchMe, user, error, setError } = useAuth();
   const navigate = useNavigate();
+
+  if (user) {
+    return <Navigate to="/admin" replace />;
+  }
 
   const handleSubmit = async (
     e: SyntheticEvent<HTMLFormElement, SubmitEvent>,
   ) => {
     e.preventDefault();
-    setError("");
+    setError(null);
 
     try {
       await api.post("/auth/login", { username, password });
