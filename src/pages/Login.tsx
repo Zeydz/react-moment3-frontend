@@ -21,8 +21,10 @@ export default function Login() {
     setError(null);
 
     try {
+      /* Send credentials */
       await api.post("/auth/login", { username, password });
       await fetchMe();
+      /* Navigate to /admin if login is successful */
       navigate("/admin");
     } catch (err: any) {
       console.error("Login request payload:", { username, password });

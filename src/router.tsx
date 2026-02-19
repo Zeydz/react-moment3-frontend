@@ -4,8 +4,8 @@ import Layout from "./components/Layout";
 import { Outlet } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/Admin";
+import Home from "./pages/Home";
 
-const Home = () => <h1>Home</h1>;
 const Error = () => <h1>Error</h1>;
 
 export const router = createBrowserRouter([

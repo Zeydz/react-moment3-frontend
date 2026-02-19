@@ -38,6 +38,15 @@ export default function Layout() {
               </NavLink>
             ) : (
               <>
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) =>
+                    `${baseStyle} ${isActive ? activeStyle : inactiveStyle}`
+                  }
+                >
+                  Admin
+                </NavLink>
+
                 <span className="text-sm text-gray-300">
                   Inloggad som:{" "}
                   <span className="text-white">{user.username}</span>
