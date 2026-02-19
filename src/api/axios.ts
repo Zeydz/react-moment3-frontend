@@ -59,7 +59,7 @@ export const me = async (): Promise<User | null> => {
   }
 };
 
-/* Logout - ask server to clear session cookie */
+/* Logout, ask server to clear session cookie */
 export const logoutRequest = async (): Promise<void> => {
   try {
     await api.post('/auth/logout');

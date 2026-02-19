@@ -6,13 +6,11 @@ import { router } from "./router.tsx";
 import { useAuth } from "./store/useAuth";
 
 function AppInit({ children }: { children: React.ReactNode }) {
-  const loading = useAuth((s) => s.loading);
+  const { fetchMe, loading } = useAuth();
 
   useEffect(() => {
-    // Call fetchMe from the store directly to avoid effect re-running
-    // when function identity changes from store subscriptions.
-    void useAuth.getState().fetchMe();
-  }, []);
+    fetchMe();
+  }, [fetchMe]);
 
   if (loading) {
     return (

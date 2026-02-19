@@ -39,9 +39,7 @@ export const useAuth = create<AuthState>((set) => ({
         set({ loading: true, error: null });
         try {
             /* Fetch user from backend */
-            console.log('fetchMe: starting');
             const data = await me();
-            console.log('fetchMe: result', data);
             set({ user: data ?? null });
         } catch (error: any) {
             set({ user: null, error: error?.message ?? String(error) });
