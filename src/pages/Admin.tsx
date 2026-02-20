@@ -23,6 +23,22 @@ export default function Admin() {
     fetchPosts();
   }, []);
 
+  /* Delete specific post */
+  const handleDelete = async (id: number) => {
+    if (!confirm("Vill du ta bort posten?")) {
+      return;
+    }
+
+    try {
+      await api.delete(`/posts/${id}`);
+
+      // Ta bort från state direkt (snabb UI)
+      setPosts((posts) => posts.filter((post) => post.id !== id));
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -36,22 +52,38 @@ export default function Admin() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl shadow divide-y">
-        {/* Print out posts */}
-        {posts.map(post => (
-          <div key={post.id} className="p-4 flex justify-between">
-            <span>{post.title}</span>
-            <Link
-              to={`/posts/${post.id}`}
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Visa
-            </Link>
+      <div className="bg-white rounded-2xl shadow-sm border divide-y">
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className="p-4 flex items-center justify-between"
+          >
+            {/* Left side */}
+            <div>
+              <h2 className="font-medium text-gray-800">{post.title}</h2>
+            </div>
+
+            {/* Right side */}
+            <div className="flex items-center gap-3">
+              <Link
+                to={`/posts/${post.id}`}
+                className="text-sm px-3 py-1 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition"
+              >
+                Visa
+              </Link>
+
+              <button
+                onClick={() => handleDelete(post.id)}
+                className="text-sm px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
+              >
+                Ta bort
+              </button>
+            </div>
           </div>
         ))}
 
         {posts.length === 0 && (
-          <p className="p-4 text-gray-500">Inga posts ännu.</p>
+          <div className="p-6 text-center text-gray-500">Inga posts ännu.</div>
         )}
       </div>
     </div>
