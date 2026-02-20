@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/Admin";
 import Home from "./pages/Home";
+import Post from "./pages/Post";
 
 const Error = () => <h1>Error</h1>;
 
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "posts/:id",
+        element: <Post />
       },
       {
         path: "admin",
