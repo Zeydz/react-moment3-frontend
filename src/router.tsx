@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/Admin";
 import Home from "./pages/Home";
 import Post from "./pages/Post";
+import CreatePost from "./pages/CreatePost";
 
 const Error = () => <h1>Error</h1>;
 
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "posts/:id",
-        element: <Post />
+        element: <Post />,
       },
       {
         path: "admin",
@@ -34,12 +35,13 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      /*       {
+      {
         path: "admin/create",
         element: (
-          <ProtectedRoute></ProtectedRoute>
-        )
-      }, */
+        <ProtectedRoute>
+          <CreatePost />
+        </ProtectedRoute>),
+      },
       {
         path: "*",
         element: <Error />,
