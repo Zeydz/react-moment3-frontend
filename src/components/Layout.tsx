@@ -12,7 +12,7 @@ export default function Layout() {
     <div className="min-h-screen bg-gray-50">
       <nav className="sticky top-0 bg-[#24252A] border-b shadow-sm z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
-          <div className="text-xl font-bold text-white">MOMENT 3</div>
+          <NavLink className="text-xl font-bold text-white" to="/">MOMENT 3</NavLink>
 
           <div className="flex gap-4 font-medium items-center">
             <NavLink

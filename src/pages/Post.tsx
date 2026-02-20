@@ -41,6 +41,10 @@ export default function Post() {
     <div className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow">
       <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
       <p className="text-gray-700 leading-relaxed">{post.content}</p>
+      <div className="text-center mt-6">
+        <a href="/" className="text-blue-600 hover:text-blue-800 transition">Tillbaka till hem</a>
+      </div>
     </div>
+
   );
 }

@@ -1,6 +1,6 @@
 import { useAuth } from '../store/useAuth'
 
-function Admin() {
+export default function Admin() {
   const { user } = useAuth();
 
   return (
@@ -11,5 +11,3 @@ function Admin() {
     </>
   )
 }
-
-export default Admin

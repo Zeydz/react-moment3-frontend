@@ -70,12 +70,6 @@ export default function Login() {
           />
         </div>
 
-        {error && (
-          <div className="text-red-500 text-sm bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
-            {error}
-          </div>
-        )}
-
         <button
           type="submit"
           className="w-full bg-black text-white py-3 rounded-xl font-medium hover:bg-black/90 active:scale-[0.99] transition"
