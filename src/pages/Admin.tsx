@@ -41,12 +41,12 @@ export default function Admin() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <h1 className="text-2xl font-bold">Admin</h1>
 
         <Link
           to="/admin/create"
-          className="bg-black text-white px-4 py-2 rounded-xl hover:bg-black/90 transition"
+          className="bg-black text-white px-4 py-2 rounded-xl hover:bg-black/90 transition text-center"
         >
           Ny post
         </Link>
@@ -56,15 +56,17 @@ export default function Admin() {
         {posts.map((post) => (
           <div
             key={post.id}
-            className="p-4 flex items-center justify-between"
+            className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
           >
             {/* Left side */}
-            <div>
-              <h2 className="font-medium text-gray-800">{post.title}</h2>
+            <div className="min-w-0">
+              <h2 className="font-medium text-gray-800 break-words">
+                {post.title}
+              </h2>
             </div>
 
             {/* Right side */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:justify-end">
               <Link
                 to={`/posts/${post.id}`}
                 className="text-sm px-3 py-1 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition"
@@ -74,10 +76,16 @@ export default function Admin() {
 
               <button
                 onClick={() => handleDelete(post.id)}
-                className="text-sm px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
+                className="text-sm px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition cursor-pointer"
               >
                 Ta bort
               </button>
+              <Link
+                to={`/admin/posts/${post.id}/edit`}
+                className="text-sm text-yellow-600 bg-yellow-50 hover:bg-yellow-100 transition px-3 py-1 rounded-lg"
+              >
+                Redigera
+              </Link>
             </div>
           </div>
         ))}
