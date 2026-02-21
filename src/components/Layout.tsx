@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../store/useAuth";
 import { useState } from "react";
+import Spinner from "./Spinner";
 
 export default function Layout() {
   const baseStyle = "px-3 py-1 rounded-lg transition";
@@ -33,7 +34,7 @@ export default function Layout() {
 
               {/* Show neither login nor user until loading finished */}
               {loading ? (
-                <span className="text-sm text-gray-300">Loading...</span>
+                <Spinner size="sm" className="text-gray-300" />
               ) : !user ? (
                 <NavLink
                   to="/login"
@@ -128,7 +129,7 @@ export default function Layout() {
               </NavLink>
 
               {loading ? (
-                <span className="text-sm text-gray-300">Loading...</span>
+                <Spinner size="sm" className="text-gray-300" />
               ) : !user ? (
                 <NavLink
                   to="/login"

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
+import Spinner from "../components/Spinner";
 
 interface Post {
   id: number;
@@ -31,7 +32,11 @@ export default function Post() {
   }, [id]);
 
   if (loading) {
-    return <p>Laddar post...</p>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
   }
   if (!post) {
     return <p>Posten hittades inte.</p>;

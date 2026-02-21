@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+## Projekt: Enkel blogg (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Det här är frontenden för ett litet blogprojekt byggt med React, TypeScript och Vite. Applikationen visar inlägg på startsidan och har ett administrationsgränssnitt där du kan skapa, redigera och ta bort inlägg. Administrationssidorna kräver inloggning.
 
-Currently, two official plugins are available:
+  Kort översikt
+  - Frontend: React + TypeScript + Vite
+  - Global State: enklare Zustand (`useAuth`) för autentisering
+  - HTTP: Axios-instans (`src/api/axios.ts`) med `withCredentials: true` (httpCookie från backend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Viktig funktionalitet
+  - Inloggning sker mot `POST /auth/login`. Servern sätter en HttpOnly-cookie JWT.
+  - `GET /me` används för att hämta aktuell användare (anropet skickas med cookie). Frontenden kör `fetchMe()` på app-start för att gå tillbaka till sessionen efter refresh.
+  - `POST /auth/logout` rensar cookie på servern — frontend anropar denna vid utloggning.
+  - Inläggsrutter:
+    - `GET /posts` — lista alla inlägg
+    - `GET /posts/:id` — hämta ett inlägg
+    - `POST /posts` — skapa inlägg (admin)
+    - `PUT /posts/:id` — redigera inlägg (admin)
+    - `DELETE /posts/:id` — ta bort inlägg (admin)
 
-## React Compiler
+  Viktiga routes i appen
+  - `/` — startsida med lista över inlägg
+  - `/posts/:id` — visa enskilt inlägg
+  - `/login` — inloggningssida
+  - `/admin` — admin-översikt (kräver inloggning)
+  - `/admin/create` — skapa nytt inlägg (kräver inloggning)
+  - `/admin/posts/:id/edit` — redigera inlägg (kräver inloggning)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  Setup och körning
+  1. Installera beroenden:
 
-## Expanding the ESLint configuration
+  ```bash
+  npm install
+  ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+  1. Sätta upp miljövariabler: skapa en `.env` i projektroten med:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  ```
+  VITE_API_URL=http://localhost:3000
+  ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  3. Starta dev-server:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+  ```bash
+  npm run dev
+  ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+  Hur autentisering fungerar (kort)
+  - Backend sätter en HttpOnly-cookie vid lyckad inloggning. Eftersom HttpOnly-cookie inte kan läsas från JavaScript, anropar frontend `GET /me` för att få användarens data.
+  - Frontenden kallar `fetchMe()` vid app-start (innan routingen renderas) så att användaren förblir inloggad efter uppdatering av sidan.
+  - Vid utloggning anropar frontend `POST /auth/logout` och rensar cookien med  `reply.clearCookie('token', ...)`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+  Tips för backend (snabbt)
+  - Se till att CORS tillåter `credentials: true` och att `VITE_API_URL` används som `origin` i servers CORS-inställningar.
+  - När du clear:ar cookien — använd samma `path`, `sameSite` och `secure` alternativ som när cookien sattes.

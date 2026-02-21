@@ -1,4 +1,5 @@
 import { useEffect, useState, type SyntheticEvent } from "react";
+import Spinner from "../components/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/axios";
 
@@ -13,20 +14,20 @@ export default function EditPost() {
 
   /* Fetch post */
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        /* Assign data to state */
-        const res = await api.get(`/posts/${id}`);
-        setTitle(res.data.title);
-        setContent(res.data.content);
-      } catch (error) {
-        setError("Kunde inte hämta posten.");
-        console.error("Couldn't fetch post:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPost();
+      const fetchPost = async () => {
+        setLoading(true);
+        try {
+          const res = await api.get(`/posts/${id}`);
+          setTitle(res.data.title);
+          setContent(res.data.content);
+        } catch (error) {
+          setError("Kunde inte hämta posten.");
+          console.error("Couldn't fetch post:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchPost();
   }, [id]);
 
   /* Submit update */
@@ -48,10 +49,17 @@ export default function EditPost() {
       console.error("Error updating post:", error);
     }
 
-    if (loading) {
-      return <p>Laddar post...</p>;
-    }
+      // loading handled in render
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto">
       <form

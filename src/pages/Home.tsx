@@ -1,3 +1,4 @@
+import Spinner from "../components/Spinner";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/axios";
@@ -31,7 +32,11 @@ export default function Home() {
   };
 
   if (loading) {
-    return <p>Laddar posts...</p>;
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Spinner size="md" />
+      </div>
+    );
   }
 
   return (
@@ -40,7 +45,7 @@ export default function Home() {
 
       {posts.length === 0 && <p>Inga posts ännu.</p>}
 
-    {/* Print out blog-posts */}
+      {/* Print out blog-posts */}
       {posts.map((post) => (
         <div key={post.id} className="bg-white p-4 rounded-xl shadow-sm border">
           <h2 className="text-lg font-semibold">{post.title}</h2>
