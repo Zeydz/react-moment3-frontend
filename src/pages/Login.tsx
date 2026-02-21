@@ -7,7 +7,7 @@ import { api } from "../api/axios";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { fetchMe, user, error, setError } = useAuth();
+  const { fetchMe, user, setError } = useAuth();
   const navigate = useNavigate();
 
   if (user) {
