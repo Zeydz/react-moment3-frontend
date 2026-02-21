@@ -49,7 +49,3 @@ Viktig funktionalitet
   - Backend sätter en HttpOnly-cookie vid lyckad inloggning. Eftersom HttpOnly-cookie inte kan läsas från JavaScript, anropar frontend `GET /me` för att få användarens data.
   - Frontenden kallar `fetchMe()` vid app-start (innan routingen renderas) så att användaren förblir inloggad efter uppdatering av sidan.
   - Vid utloggning anropar frontend `POST /auth/logout` och rensar cookien med  `reply.clearCookie('token', ...)`.
-
-  Tips för backend (snabbt)
-  - Se till att CORS tillåter `credentials: true` och att `VITE_API_URL` används som `origin` i servers CORS-inställningar.
-  - När du clear:ar cookien — använd samma `path`, `sameSite` och `secure` alternativ som när cookien sattes.
